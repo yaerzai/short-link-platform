@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongfeng.shortlink.persistence.mapper.ShortLinkInfoMapper">
+  <resultMap id="BaseResultMap" type="com.zhongfeng.shortlink.persistence.model.ShortLinkInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="short_link_no" jdbcType="VARCHAR" property="shortLinkNo" />
+    <result column="link_no" jdbcType="VARCHAR" property="linkNo" />
+    <result column="link_domain" jdbcType="VARCHAR" property="linkDomain" />
+    <result column="mobile_no" jdbcType="VARCHAR" property="mobileNo" />
+    <result column="table_time" jdbcType="CHAR" property="tableTime" />
+    <result column="short_line_type" jdbcType="VARCHAR" property="shortLineType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, short_link_no, link_no, link_domain, mobile_no, url, table_time,short_line_type, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_short_link_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_short_link_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_short_link_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfoExample">
+    delete from t_short_link_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_short_link_info (short_link_no, link_no, link_domain, 
+      mobile_no, table_time, create_time
+      )
+    values (#{shortLinkNo,jdbcType=VARCHAR}, #{linkNo,jdbcType=VARCHAR}, #{linkDomain,jdbcType=VARCHAR}, 
+      #{mobileNo,jdbcType=VARCHAR}, #{tableTime,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_short_link_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shortLinkNo != null">
+        short_link_no,
+      </if>
+      <if test="linkNo != null">
+        link_no,
+      </if>
+      <if test="linkDomain != null">
+        link_domain,
+      </if>
+      <if test="mobileNo != null">
+        mobile_no,
+      </if>
+      <if test="tableTime != null">
+        table_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shortLinkNo != null">
+        #{shortLinkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="linkNo != null">
+        #{linkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="linkDomain != null">
+        #{linkDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNo != null">
+        #{mobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tableTime != null">
+        #{tableTime,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfoExample" resultType="java.lang.Long">
+    select count(*) from t_short_link_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_short_link_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.shortLinkNo != null">
+        short_link_no = #{record.shortLinkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkNo != null">
+        link_no = #{record.linkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkDomain != null">
+        link_domain = #{record.linkDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileNo != null">
+        mobile_no = #{record.mobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tableTime != null">
+        table_time = #{record.tableTime,jdbcType=CHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_short_link_info
+    set id = #{record.id,jdbcType=BIGINT},
+      short_link_no = #{record.shortLinkNo,jdbcType=VARCHAR},
+      link_no = #{record.linkNo,jdbcType=VARCHAR},
+      link_domain = #{record.linkDomain,jdbcType=VARCHAR},
+      mobile_no = #{record.mobileNo,jdbcType=VARCHAR},
+      table_time = #{record.tableTime,jdbcType=CHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfo">
+    update t_short_link_info
+    <set>
+      <if test="shortLinkNo != null">
+        short_link_no = #{shortLinkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="linkNo != null">
+        link_no = #{linkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="linkDomain != null">
+        link_domain = #{linkDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNo != null">
+        mobile_no = #{mobileNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tableTime != null">
+        table_time = #{tableTime,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfo">
+    update t_short_link_info
+    set short_link_no = #{shortLinkNo,jdbcType=VARCHAR},
+      link_no = #{linkNo,jdbcType=VARCHAR},
+      link_domain = #{linkDomain,jdbcType=VARCHAR},
+      mobile_no = #{mobileNo,jdbcType=VARCHAR},
+      table_time = #{tableTime,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_short_link_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

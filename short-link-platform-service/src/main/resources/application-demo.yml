@@ -1,0 +1,40 @@
+########################Log
+logging:
+  path: /home/nadmin/logs
+
+server:
+  schedule:
+    pool: 10
+## sftp 配置
+sftp:
+  host: 192.168.32.66
+  password: S6M97aoJzocFA5AM
+  port: 22
+  user: publisher
+#####################DB
+sharding:
+  jdbc:
+    datasource:
+      ds:
+        jdbc-url: jdbc:mysql://192.168.32.66:3308/zf_short_link?autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai
+        username: application
+        password: 'c2&yq!uk$ldn0yoI9i'
+        maximum-pool-size: 50  # 最小空闲连接数量
+        minimum-idle: 2
+########################Redis
+spring:
+  redis:
+    password: 907d54bf701
+    port: 6379
+    host: 192.168.32.66
+    lettuce:
+      pool:
+        max-idle: 20
+        min-idle: 20
+        max-active: 50
+    timeout: 120s
+######################## Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.32.66:9001/eureka/,http://192.168.32.66:9002/eureka/

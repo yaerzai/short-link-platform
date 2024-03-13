@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongfeng.shortlink.persistence.mapper.ShortLinkCustomerConfigExtMapper">
+  <update id="addLinkNum">
+    update t_short_link_customer_config
+    set link_num = link_num + #{linkNum,jdbcType=INTEGER}
+    where link_no = #{linkNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

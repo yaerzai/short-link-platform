@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <title>中安通信短信运营平台</title>
+</head>
+
+<style>
+    .login {
+        /* overflow: hidden; */
+        position: relative;
+        min-height: 500px;
+    }
+
+    .head-title {
+        text-align: center;
+        font-size: 2em;
+        margin: 30px auto;
+        color: #333;
+    }
+
+    .box {
+        position: absolute;
+        /* margin-top: -175px; */
+        /* margin-left: -240px; */
+        transform: translate(-50%, -60%);
+        z-index: 1000;
+        background: rgba(255, 255, 255, .7);
+        border-radius: 4px;
+        left: 50%;
+        top: 50%;
+        width: 480px;
+        height: 350px;
+    }
+
+    .pr80 {
+        padding-right: 80px;
+        padding-bottom: 10px
+    }
+
+    canvas {
+        /* min-height: 500px; */
+        width: 100%;
+        height: auto
+            /*默认全屏显示 可自己设置高度640px*/
+        ;
+        display: inline-block;
+        vertical-align: baseline;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .canvaszz {
+        width: 100%;
+        position: absolute;
+        z-index: 10;
+        filter: alpha(opacity=40);
+        -moz-opacity: 0.4;
+        -khtml-opacity: 0.4;
+        opacity: 0.4;
+    }
+
+    .copyright {
+        color: rgba(255, 255, 255, .6);
+        position: fixed;
+        text-align: center;
+        margin-left: 50%;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        font-size: 12px;
+        margin: 0 auto;
+        z-index: 20;
+    }
+</style>
+<style>
+    /* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+</style>
+
+
+<body>
+    <div id="app">
+        <div class="login" :style="{height: screenHeight+'px'}">
+            <el-col class="box">
+                <el-row>
+                    <el-col>
+                        <h1 class="head-title">中安通信短信运营平台</h1>
+                    </el-col>
+                </el-row>
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm pr80"
+                    hide-required-asterisk>
+                    <el-form-item label="账号" prop="userName">
+                        <el-input v-model="ruleForm.userName" type="text" autocomplete="off"
+                            @keyup.enter.native="submitForm('ruleForm')"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="passWord">
+                        <el-input v-model="ruleForm.passWord" type="passWord" autocomplete="off"
+                            ></el-input>
+                    </el-form-item>
+                    <el-form-item label="OTP码" prop="verifyCode">
+                        <el-row>
+                            <el-col>
+                                <el-input maxLength="6" v-model="ruleForm.verifyCode"></el-input>
+                            </el-col>
+                            <!-- <el-col :span="6" :offset="3" style="height: 40px">
+                                <img v-if="!imgLoading" :src="imgUrl" alt="" @click="this.getVerifyCode" style="height: 100%">
+                                <div v-else style="color: #f2f2f2;">
+                                    正在加载
+                                </div>
+                            </el-col> -->
+                        </el-row>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" :loading="loginLoading" @click="submitForm('ruleForm')">登录</el-button>
+                        <!-- <el-button @click="resetForm('ruleForm')">重置</el-button> -->
+                    </el-form-item>
+                </el-form>
+            </el-col>
+
+            <div class="copyright">Copyright 2022 ©版权所有 深圳市中安通信科技有限公司 <a href="https://beian.miit.gov.cn/" target="_blank"
+                    style="text-decoration: none;color: rgba(255,255,255,.6)">粤ICP备2022096508号</a></div>
+
+            <div class="canvaszz" :style="{height: screenHeight+'px'}"></div>
+            <canvas id="canvas" :style="{height: screenHeight+'px'}"></canvas>
+        </div>
+    </div>
+</body>
+
+<!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
+<!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                visible: false,
+                yzm: '',
+                userName: '',
+                password: '',
+                ruleForm: {
+                  userName: '',
+                  passWord: '',
+                  verifyCode: ''
+                },
+                rules: {
+                  userName: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+                  passWord: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                  verifyCode: [{ required: true, message: '请输入OTP码', trigger: 'blur' }]
+                },
+                loginLoading: false,
+                screenHeight: window.innerHeight, // 屏幕高度
+            }
+        },
+        watch: {
+            'screenHeight': function (val) { // 监听屏幕高度变化
+                // console.log(val,'fdafsadf')
+                var oIframe = document.getElementById('login')
+                if (oIframe) {
+                    oIframe.style.height = Number(val) + 'px' // '120'是页面布局调整，可去除
+                }
+            }
+        },
+        mounted() {
+            this.initCanvas()
+        },
+        methods: {
+            // 初始化canvas
+            submitForm (formName) {
+              this.$refs[formName].validate((valid) => {
+                if (valid) {
+                  this.loginLoading = true
+                  setTimeout(() => {
+                    this.loginLoading = false
+                    this.$message.error('登录失败')
+                  }, 800);
+                } else {
+                  console.log('error submit!!')
+                  return false
+                }
+              })
+            },
+            initCanvas() {
+                var _this = this
+                window.onresize = function () { // 定义窗口大小变更通知事件
+                    _this.screenHeight = document.documentElement.clientHeight // 窗口高度
+                }
+                var canvas = document.getElementById('canvas')
+                var ctx = canvas.getContext('2d')
+                var w = canvas.width = window.innerWidth
+                var h = canvas.height = window.innerHeight
+                var hue = 217
+                var stars = []
+                var count = 0
+                var maxStars = 1300 // 星星数量
+
+                var canvas2 = document.createElement('canvas')
+                var ctx2 = canvas2.getContext('2d')
+                canvas2.width = 100
+                canvas2.height = 100
+                var half = canvas2.width / 2
+                var gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half)
+                gradient2.addColorStop(0.025, '#CCC')
+                gradient2.addColorStop(0.1, 'hsl(' + hue + ', 61%, 33%)')
+                gradient2.addColorStop(0.25, 'hsl(' + hue + ', 64%, 6%)')
+                gradient2.addColorStop(1, 'transparent')
+
+                ctx2.fillStyle = gradient2
+                ctx2.beginPath()
+                ctx2.arc(half, half, half, 0, Math.PI * 2)
+                ctx2.fill()
+
+                // End cache
+
+                function random(min, max) {
+                    if (arguments.length < 2) {
+                        max = min
+                        min = 0
+                    }
+
+                    if (min > max) {
+                        var hold = max
+                        max = min
+                        min = hold
+                    }
+
+                    return Math.floor(Math.random() * (max - min + 1)) + min
+                }
+
+                function maxOrbit(x, y) {
+                    var max = Math.max(x, y)
+                    var diameter = Math.round(Math.sqrt(max * max + max * max))
+                    return diameter / 2
+                    // 星星移动范围，值越大范围越小，
+                }
+
+                var Star = function () {
+                    this.orbitRadius = random(maxOrbit(w, h))
+                    this.radius = random(60, this.orbitRadius) / 8
+                    // 星星大小
+                    this.orbitX = w / 2
+                    this.orbitY = h / 2
+                    this.timePassed = random(0, maxStars)
+                    this.speed = random(this.orbitRadius) / 50000
+                    // 星星移动速度
+                    this.alpha = random(2, 10) / 10
+
+                    count++
+                    stars[count] = this
+                }
+
+                Star.prototype.draw = function () {
+                    var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX
+                    var y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY
+                    var twinkle = random(10)
+
+                    if (twinkle === 1 && this.alpha > 0) {
+                        this.alpha -= 0.05
+                    } else if (twinkle === 2 && this.alpha < 1) {
+                        this.alpha += 0.05
+                    }
+
+                    ctx.globalAlpha = this.alpha
+                    ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius)
+                    this.timePassed += this.speed
+                }
+
+                for (var i = 0; i < maxStars; i++) {
+                    /* eslint-disable no-new */
+                    new Star()
+                }
+
+                function animation() {
+                    ctx.globalCompositeOperation = 'source-over'
+                    ctx.globalAlpha = 0.5 // 尾巴
+                    ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)'
+                    ctx.fillRect(0, 0, w, h)
+
+                    ctx.globalCompositeOperation = 'lighter'
+                    for (var i = 1, l = stars.length; i < l; i++) {
+                        stars[i].draw()
+                    };
+
+                    window.requestAnimationFrame(animation)
+                }
+
+                animation()
+            }
+        }
+    })
+</script>
+
+</html>

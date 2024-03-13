@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongfeng.shortlink.persistence.mapper.ShortLinkProcessMapper">
+
+    <insert id="batchInsertShortLinkInfo" parameterType="java.util.List">
+        insert into t_short_link_info_${tableTime} (short_link_no, link_no, link_domain, mobile_no, url, table_time,short_line_type)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.shortLinkNo,jdbcType=VARCHAR},#{item.linkNo,jdbcType=VARCHAR},
+            #{item.linkDomain,jdbcType=VARCHAR},#{item.mobileNo,jdbcType=VARCHAR},
+            #{item.url,jdbcType=VARCHAR},#{item.tableTime,jdbcType=VARCHAR},
+            #{item.shortLineType,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateShortLinkBatchInfo" parameterType="java.util.List">
+        update t_short_link_batch_info
+        <set>
+            <trim prefix="click_num =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when link_no = #{item.linkNo} AND link_batch_no=#{item.linkBatchNo}
+                    then click_num + #{item.clickNum,jdbcType=INTEGER}
+                </foreach>
+                else click_num
+            </trim>
+        </set>
+        <where>
+            <foreach collection="list" item="item" open="( " separator=") or (" close=" )">
+                link_no = #{item.linkNo} AND link_batch_no = #{item.linkBatchNo}
+            </foreach>
+        </where>
+    </update>
+
+    <select id="queryRequestInfo"
+            resultType="com.zhongfeng.shortlink.persistence.dataservice.bo.ShortLinkRequestStatisticsBO">
+        select ${groupBy}, count(short_link_no) totalNum from t_short_link_request_info
+        where request_time between #{beginTime,jdbcType = TIMESTAMP} and #{endTime,jdbcType = TIMESTAMP} group by ${groupBy}
+    </select>
+
+
+</mapper>

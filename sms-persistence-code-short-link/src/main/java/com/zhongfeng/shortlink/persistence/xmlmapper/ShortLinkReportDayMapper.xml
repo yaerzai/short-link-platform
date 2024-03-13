@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongfeng.shortlink.persistence.mapper.ShortLinkReportDayMapper">
+  <resultMap id="BaseResultMap" type="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDay">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="link_no" jdbcType="VARCHAR" property="linkNo" />
+    <result column="customer_no" jdbcType="VARCHAR" property="customerNo" />
+    <result column="user_no" jdbcType="VARCHAR" property="userNo" />
+    <result column="mobile_isp" jdbcType="VARCHAR" property="mobileIsp" />
+    <result column="mobile_province" jdbcType="VARCHAR" property="mobileProvince" />
+    <result column="ip_isp" jdbcType="VARCHAR" property="ipIsp" />
+    <result column="ip_province" jdbcType="VARCHAR" property="ipProvince" />
+    <result column="ip_city" jdbcType="VARCHAR" property="ipCity" />
+    <result column="browser" jdbcType="VARCHAR" property="browser" />
+    <result column="os" jdbcType="VARCHAR" property="os" />
+    <result column="brand" jdbcType="TINYINT" property="brand" />
+    <result column="pv_num" jdbcType="INTEGER" property="pvNum" />
+    <result column="uv_num" jdbcType="INTEGER" property="uvNum" />
+    <result column="ip_num" jdbcType="INTEGER" property="ipNum" />
+    <result column="report_date" jdbcType="CHAR" property="reportDate" />
+    <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, link_no, customer_no, user_no, mobile_isp, mobile_province, ip_isp, ip_province, 
+    ip_city, browser, os, brand, pv_num, uv_num, ip_num, report_date, operator_id, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDayExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_short_link_report_day
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_short_link_report_day
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_short_link_report_day
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDayExample">
+    delete from t_short_link_report_day
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDay">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_short_link_report_day (link_no, customer_no, user_no, 
+      mobile_isp, mobile_province, ip_isp, 
+      ip_province, ip_city, browser, 
+      os, brand, pv_num, uv_num, 
+      ip_num, report_date, operator_id, 
+      create_time)
+    values (#{linkNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, 
+      #{mobileIsp,jdbcType=VARCHAR}, #{mobileProvince,jdbcType=VARCHAR}, #{ipIsp,jdbcType=VARCHAR}, 
+      #{ipProvince,jdbcType=VARCHAR}, #{ipCity,jdbcType=VARCHAR}, #{browser,jdbcType=VARCHAR}, 
+      #{os,jdbcType=VARCHAR}, #{brand,jdbcType=TINYINT}, #{pvNum,jdbcType=INTEGER}, #{uvNum,jdbcType=INTEGER}, 
+      #{ipNum,jdbcType=INTEGER}, #{reportDate,jdbcType=CHAR}, #{operatorId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDay">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_short_link_report_day
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="linkNo != null">
+        link_no,
+      </if>
+      <if test="customerNo != null">
+        customer_no,
+      </if>
+      <if test="userNo != null">
+        user_no,
+      </if>
+      <if test="mobileIsp != null">
+        mobile_isp,
+      </if>
+      <if test="mobileProvince != null">
+        mobile_province,
+      </if>
+      <if test="ipIsp != null">
+        ip_isp,
+      </if>
+      <if test="ipProvince != null">
+        ip_province,
+      </if>
+      <if test="ipCity != null">
+        ip_city,
+      </if>
+      <if test="browser != null">
+        browser,
+      </if>
+      <if test="os != null">
+        os,
+      </if>
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="pvNum != null">
+        pv_num,
+      </if>
+      <if test="uvNum != null">
+        uv_num,
+      </if>
+      <if test="ipNum != null">
+        ip_num,
+      </if>
+      <if test="reportDate != null">
+        report_date,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="linkNo != null">
+        #{linkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null">
+        #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null">
+        #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileIsp != null">
+        #{mobileIsp,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileProvince != null">
+        #{mobileProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="ipIsp != null">
+        #{ipIsp,jdbcType=VARCHAR},
+      </if>
+      <if test="ipProvince != null">
+        #{ipProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="ipCity != null">
+        #{ipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="browser != null">
+        #{browser,jdbcType=VARCHAR},
+      </if>
+      <if test="os != null">
+        #{os,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        #{brand,jdbcType=TINYINT},
+      </if>
+      <if test="pvNum != null">
+        #{pvNum,jdbcType=INTEGER},
+      </if>
+      <if test="uvNum != null">
+        #{uvNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipNum != null">
+        #{ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="reportDate != null">
+        #{reportDate,jdbcType=CHAR},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDayExample" resultType="java.lang.Long">
+    select count(*) from t_short_link_report_day
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_short_link_report_day
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.linkNo != null">
+        link_no = #{record.linkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerNo != null">
+        customer_no = #{record.customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userNo != null">
+        user_no = #{record.userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileIsp != null">
+        mobile_isp = #{record.mobileIsp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileProvince != null">
+        mobile_province = #{record.mobileProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ipIsp != null">
+        ip_isp = #{record.ipIsp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ipProvince != null">
+        ip_province = #{record.ipProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ipCity != null">
+        ip_city = #{record.ipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.browser != null">
+        browser = #{record.browser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.os != null">
+        os = #{record.os,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brand != null">
+        brand = #{record.brand,jdbcType=TINYINT},
+      </if>
+      <if test="record.pvNum != null">
+        pv_num = #{record.pvNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.uvNum != null">
+        uv_num = #{record.uvNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.ipNum != null">
+        ip_num = #{record.ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.reportDate != null">
+        report_date = #{record.reportDate,jdbcType=CHAR},
+      </if>
+      <if test="record.operatorId != null">
+        operator_id = #{record.operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_short_link_report_day
+    set id = #{record.id,jdbcType=BIGINT},
+      link_no = #{record.linkNo,jdbcType=VARCHAR},
+      customer_no = #{record.customerNo,jdbcType=VARCHAR},
+      user_no = #{record.userNo,jdbcType=VARCHAR},
+      mobile_isp = #{record.mobileIsp,jdbcType=VARCHAR},
+      mobile_province = #{record.mobileProvince,jdbcType=VARCHAR},
+      ip_isp = #{record.ipIsp,jdbcType=VARCHAR},
+      ip_province = #{record.ipProvince,jdbcType=VARCHAR},
+      ip_city = #{record.ipCity,jdbcType=VARCHAR},
+      browser = #{record.browser,jdbcType=VARCHAR},
+      os = #{record.os,jdbcType=VARCHAR},
+      brand = #{record.brand,jdbcType=TINYINT},
+      pv_num = #{record.pvNum,jdbcType=INTEGER},
+      uv_num = #{record.uvNum,jdbcType=INTEGER},
+      ip_num = #{record.ipNum,jdbcType=INTEGER},
+      report_date = #{record.reportDate,jdbcType=CHAR},
+      operator_id = #{record.operatorId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDay">
+    update t_short_link_report_day
+    <set>
+      <if test="linkNo != null">
+        link_no = #{linkNo,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNo != null">
+        customer_no = #{customerNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userNo != null">
+        user_no = #{userNo,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileIsp != null">
+        mobile_isp = #{mobileIsp,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileProvince != null">
+        mobile_province = #{mobileProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="ipIsp != null">
+        ip_isp = #{ipIsp,jdbcType=VARCHAR},
+      </if>
+      <if test="ipProvince != null">
+        ip_province = #{ipProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="ipCity != null">
+        ip_city = #{ipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="browser != null">
+        browser = #{browser,jdbcType=VARCHAR},
+      </if>
+      <if test="os != null">
+        os = #{os,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        brand = #{brand,jdbcType=TINYINT},
+      </if>
+      <if test="pvNum != null">
+        pv_num = #{pvNum,jdbcType=INTEGER},
+      </if>
+      <if test="uvNum != null">
+        uv_num = #{uvNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipNum != null">
+        ip_num = #{ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="reportDate != null">
+        report_date = #{reportDate,jdbcType=CHAR},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDay">
+    update t_short_link_report_day
+    set link_no = #{linkNo,jdbcType=VARCHAR},
+      customer_no = #{customerNo,jdbcType=VARCHAR},
+      user_no = #{userNo,jdbcType=VARCHAR},
+      mobile_isp = #{mobileIsp,jdbcType=VARCHAR},
+      mobile_province = #{mobileProvince,jdbcType=VARCHAR},
+      ip_isp = #{ipIsp,jdbcType=VARCHAR},
+      ip_province = #{ipProvince,jdbcType=VARCHAR},
+      ip_city = #{ipCity,jdbcType=VARCHAR},
+      browser = #{browser,jdbcType=VARCHAR},
+      os = #{os,jdbcType=VARCHAR},
+      brand = #{brand,jdbcType=TINYINT},
+      pv_num = #{pvNum,jdbcType=INTEGER},
+      uv_num = #{uvNum,jdbcType=INTEGER},
+      ip_num = #{ipNum,jdbcType=INTEGER},
+      report_date = #{reportDate,jdbcType=CHAR},
+      operator_id = #{operatorId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDayExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_short_link_report_day
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

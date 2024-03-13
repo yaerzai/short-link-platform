@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongfeng.shortlink.persistence.mapper.ShortLinkReportDayExtMapper">
+  <select id="queryStat" resultType="com.zhongfeng.shortlink.persistence.model.ShortLinkReportDay">
+    select
+      report_date, customer_no, user_no, link_no,  sum(pv_num) pvNum, sum(uv_num) uvNum, sum(ip_num) ipNum
+      <if test="groupBy != null and groupBy != ''">, ${groupBy}</if>
+    from
+      t_short_link_report_day
+    where
+        report_date between #{beginDate} and #{endDate}
+        <if test="linkNo != null and linkNo != ''"> and link_no=#{linkNo,jdbcType=VARCHAR}</if>
+        <if test="customerNo != null and customerNo != ''"> and customer_no=#{customerNo,jdbcType=VARCHAR}</if>
+        <if test="userNo != null and userNo != ''"> and user_no=#{userNo,jdbcType=VARCHAR}</if>
+        <if test="mobileIsp != null and mobileIsp != ''"> and mobile_isp=#{mobileIsp,jdbcType=VARCHAR}</if>
+        <if test="mobileProvince != null and mobileProvince != ''"> and mobile_province=#{mobileProvince,jdbcType=VARCHAR}</if>
+        <if test="os != null and os != ''"> and os=#{os,jdbcType=VARCHAR}</if>
+        <if test="brand != null"> and brand=#{brand,jdbcType=TINYINT}</if>
+    group by
+        report_date, customer_no, user_no, link_no
+        <if test="groupBy != null and groupBy != ''">, ${groupBy}</if>
+    order by
+      report_date, customer_no, user_no, link_no
+      <if test="groupBy != null and groupBy != ''">, ${groupBy}</if>
+    limit #{beginNum}, #{pageSize}
+  </select>
+
+    <select id="countStat" resultType="java.lang.Integer">
+      select count(*) from (
+        select
+            report_date, customer_no, user_no, link_no, sum(pv_num) pv_num, sum(uv_num) uv_num, sum(ip_num) ip_num
+            <if test="groupBy != null and groupBy != ''">, ${groupBy}</if>
+        from
+            t_short_link_report_day
+        where
+            report_date between #{beginDate} and #{endDate}
+            <if test="linkNo != null and linkNo != ''"> and link_no=#{linkNo,jdbcType=VARCHAR}</if>
+            <if test="customerNo != null and customerNo != ''"> and customer_no=#{customerNo,jdbcType=VARCHAR}</if>
+            <if test="userNo != null and userNo != ''"> and user_no=#{userNo,jdbcType=VARCHAR}</if>
+            <if test="mobileIsp != null and mobileIsp != ''"> and mobile_isp=#{mobileIsp,jdbcType=VARCHAR}</if>
+            <if test="mobileProvince != null and mobileProvince != ''"> and mobile_province=#{mobileProvince,jdbcType=VARCHAR}</if>
+            <if test="os != null and os != ''"> and os=#{os,jdbcType=VARCHAR}</if>
+            <if test="brand != null"> and brand=#{brand,jdbcType=TINYINT}</if>
+        group by
+            report_date, customer_no, user_no, link_no
+            <if test="groupBy != null and groupBy != ''">, ${groupBy}</if>
+      ) a
+    </select>
+
+</mapper>

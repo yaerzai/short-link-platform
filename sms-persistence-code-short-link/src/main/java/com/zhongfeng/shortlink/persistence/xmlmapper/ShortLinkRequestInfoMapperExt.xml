@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongfeng.shortlink.persistence.mapper.ShortLinkRequestInfoMapperExt">
+  <resultMap id="BaseResultMap" type="com.zhongfeng.shortlink.persistence.model.RequestRealtimeStatisticResp">
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="pv" jdbcType="INTEGER" property="pv" />
+    <result column="uv" jdbcType="INTEGER" property="uv" />
+    <result column="ip" jdbcType="INTEGER" property="ip" />
+  </resultMap>
+
+  <resultMap id="ReportResultMap" type="com.zhongfeng.shortlink.persistence.model.RequestReportResp">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="table_time" jdbcType="VARCHAR" property="tableTime"/>
+    <result column="mobile_no" jdbcType="VARCHAR" property="mobileNo" />
+    <result column="short_line_type" jdbcType="VARCHAR" property="shortLineType" />
+    <result column="pv" jdbcType="INTEGER" property="pv" />
+    <result column="uv" jdbcType="INTEGER" property="uv" />
+    <result column="ip" jdbcType="INTEGER" property="ip" />
+  </resultMap>
+
+  <select id="requestRealtimeStatistic" resultMap="BaseResultMap">
+    select
+      date_format(request_time, '%Y%m%d%H') as time,
+      count(*) as pv,
+      count(if(data_validate=1, 1, null)) as uv,
+      count(distinct request_ip) as ip
+    from t_short_link_request_info_${tableTime} where link_no = #{linkNo,jdbcType=VARCHAR}
+    <if test="requestDevice != null and requestDevice != ''">
+      and request_device = #{requestDevice,jdbcType=VARCHAR}
+    </if>
+    <if test="browser != null and browser != ''">
+      and browser = #{browser,jdbcType=VARCHAR}
+    </if>
+    group by date_format(request_time, '%Y%m%d%H')
+  </select>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <select id="requestReportQuery" resultMap="ReportResultMap">
+    SELECT
+      min(id) as id,
+      min(table_time) as table_time,
+      mobile_no,
+      short_line_type,
+      count(*) as pv,
+      count(if(data_validate=1, 1, null)) as uv,
+      count(distinct request_ip) as ip
+    FROM
+        t_short_link_request_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    group by mobile_no,short_line_type
+  </select>
+</mapper>
